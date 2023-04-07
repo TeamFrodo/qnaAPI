@@ -32,7 +32,7 @@ async function createQuestions() {
  id SERIAL PRIMARY KEY,
  product_id INT,
  body VARCHAR(1000),
- date_written VARCHAR(1000),
+ date_written BIGINT,
  asker_name VARCHAR(50),
  asker_email VARCHAR(50),
  reported BOOLEAN,
@@ -43,6 +43,7 @@ async function createQuestions() {
     .then(() => pool.query(questionData))
     .then((result) =>console.log("copied question data rowCount =", result.rowCount))
     .catch((err) => console.log(err));
+  await pool.query(`SELECT setval('questions_id_seq',(SELECT MAX(id)FROM questions)+1)`).then((result) => console.log('next val set questions table', result.rowCount))
 }
 async function createPhotos() {
   // create table for photos
@@ -67,7 +68,7 @@ async function createAnswers() {
   id SERIAL PRIMARY KEY,
   question_id INT,
   body TEXT,
-  date_written VARCHAR(1000),
+  date_written BIGINT,
   answerer_name TEXT,
   answerer_email TEXT,
   reported BOOLEAN,
@@ -78,6 +79,7 @@ async function createAnswers() {
     .then(() => pool.query(answerData)
     .then((result) =>console.log("copied answer data rowCount =", result.rowCount))
     .catch((err) => console.log(err)))
+    await pool.query(`SELECT setval('answers_id_seq',(SELECT MAX(id)FROM answers)+1)`).then((result) => console.log('next val set answers table', result.rowCount))
 }
 
 module.exports = pool;

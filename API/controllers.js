@@ -1,18 +1,21 @@
 const Model = require("./models.js");
 
-async function getQuestions(req, res) {
+function getQuestions(req, res) {
   const params = req.query;
   // console.log("controller params", params);
   Model.getQuestions(params).then((data) => res.send(data.rows));
 }
-async function getAnswers(req, res) {
-  const params = req.query;
-  console.log('params in controller', params)
-  Model.getAnswers(params).then((data) => res.status(201).send(data.rows))
-}
-// const addQuestion = (req, res) {
+function getAnswers(req, res) {
+  const query = req.query;
+  const params = req.params;
 
-// }
+  // console.log("params in controller", params, query);
+  Model.getAnswers(params).then((data) => res.send(data.rows));
+}
+function addQuestion(req, res) {
+  const params = req.query;
+  Model.addQuestion(params).then(() => res.status(201).end());
+}
 // const addAnswer = (req, res) {
 
 // }
@@ -32,7 +35,7 @@ async function getAnswers(req, res) {
 module.exports = {
   getQuestions,
   getAnswers,
-  // addQuestion,
+  addQuestion,
   // addAnswer,
   // questionHelpful,
   // reportQuestion,

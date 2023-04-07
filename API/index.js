@@ -14,11 +14,11 @@ app.get("/qa/questions/:question_id/answers", (req, res) => {
   console.log('reqbody index', req.params, req.query)
   controller.getAnswers(req, res);
 })
-app.post("/qa/questions/:question_id/answers", (req, res) => {
-  controller.addAnswer(req, res);
-});
 app.post("/qa/questions", (req, res) => {
   controller.addQuestion(req, res);
+});
+app.post("/qa/questions/:question_id/answers", (req, res) => {
+  controller.addAnswer(req, res);
 });
 app.put("/qa/questions/:question_id/helpful", (req, res) => {
   controller.questionHelpful(req, res);

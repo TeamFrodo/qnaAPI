@@ -11,7 +11,6 @@ app.get("/qa/questions", (req, res) => {
   controller.getQuestions(req, res)
 });
 app.get("/qa/questions/:question_id/answers", (req, res) => {
-  console.log('reqbody index', req.params, req.query)
   controller.getAnswers(req, res);
 })
 app.post("/qa/questions", (req, res) => {

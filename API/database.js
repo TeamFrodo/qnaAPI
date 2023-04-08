@@ -36,7 +36,7 @@ async function createQuestions() {
  asker_name VARCHAR(50),
  asker_email VARCHAR(50),
  reported BOOLEAN,
- helpful VARCHAR(1000)
+ helpful INT
 );`
     )
     .then((res) => console.log("created questions table"))
@@ -79,7 +79,7 @@ async function createAnswers() {
     .then(() => pool.query(answerData)
     .then((result) =>console.log("copied answer data rowCount =", result.rowCount))
     .catch((err) => console.log(err)))
-    await pool.query(`SELECT setval('answers_id_seq',(SELECT MAX(id)FROM answers)+1)`).then((result) => console.log('next val set answers table', result.rowCount))
+  await pool.query(`SELECT setval('answers_id_seq',(SELECT MAX(id)FROM answers)+1)`).then((result) => console.log('next val set answers table', result.rowCount))
 }
 
 module.exports = pool;

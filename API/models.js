@@ -74,10 +74,8 @@ async function addQuestion(params) {
     VALUES ($1, $2, $3, $4, $5, $6)`;
   try {
     await db.query(query, newParams);
-    db.end();
   } catch (err) {
     console.log(err);
-    db.end();
   }
 }
 
@@ -96,10 +94,8 @@ async function addAnswer(params) {
     await db.query(query, newParams).then((res) => console.log(res.rows[0].id));
     //use this res.rows from above to que up the next insert query;
     //run a 4each on the photos array and attach the id on the INSERT;
-    db.end();
   } catch (err) {
     console.log(err);
-    db.end();
   }
 }
 
@@ -111,7 +107,6 @@ async function questionHelpful(params) {
     await db.query(query, value).then((res) => console.log(res));
   } catch (err) {
     console.log(err);
-    db.end();
   }
 }
 
@@ -123,7 +118,6 @@ async function reportQuestion(params) {
     await db.query(query, value).then((res) => console.log(res));
   } catch (err) {
     console.log(err);
-    db.end();
   }
 }
 
@@ -135,7 +129,6 @@ async function answerHelpful(params) {
     await db.query(query, value).then((res) => console.log(res));
   } catch (err) {
     console.log(err);
-    db.end();
   }
 }
 
@@ -147,7 +140,6 @@ async function reportAnswer(params) {
     await db.query(query, value).then((res) => console.log(res));
   } catch (err) {
     console.log(err);
-    db.end();
   }
 }
 

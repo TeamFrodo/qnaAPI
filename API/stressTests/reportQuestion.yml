@@ -1,0 +1,22 @@
+config:
+  target: "http://127.0.0.1:3000"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      name: Warm up
+    - duration: 60
+      arrivalRate: 25
+      rampTo: 75
+      name: Ramp up load
+    - duration: 60
+      arrivalRate: 100
+      name: Sustained load
+  defaults:
+    timeout: 20000
+    headers:
+      content-type: "application/json"
+scenarios:
+  - name: "Get Questions"
+    flow:
+      - put:
+          url: "/qa/questions/{{$randomNumber(200, 1000000)}}/report"

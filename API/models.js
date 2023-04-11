@@ -1,12 +1,6 @@
 const db = require("./database.js");
 
 async function getQuestions(params) {
-  //******-----TODO-----******
-  // console.log("params in model", params);
-  //add in count per page  --conditionals for default
-  //add in page requested  --conditionals for default
-  //add in joined photos and answers
-    //*****FIRST ATTEMPT */
   const query =
   `SELECT
     questions.id as question_id,
@@ -18,7 +12,14 @@ async function getQuestions(params) {
   FROM questions
   WHERE reported = false
   AND product_id = ${params.product_id} `;
-  // const query = `
+
+  try {
+    const res = await db.query(query);
+    return res.rows;
+  } catch (err) {
+    console.log(err);
+  }
+    // const query = `
   //   SELECT
   //     json_build_object
   //       ('questionID', questions.id, 'questionBody', questions.body, 'answers',
@@ -31,12 +32,6 @@ async function getQuestions(params) {
   // AND questions.product_id = ${params.product_id}
   // AND answers.reported = false
   // GROUP BY questions.id;`
-  try {
-    const res = await db.query(query);
-    return res.rows;
-  } catch (err) {
-    console.log(err);
-  }
 }
 
 async function getAnswers(params) {
@@ -49,13 +44,6 @@ async function getAnswers(params) {
     WHERE reported = false
     AND question_id = ${params.question_id}
     GROUP BY answers.id`;
-  // const query = `SELECT json_build_object(
-  //   'answerID', answers.id,
-  //   'answerBody', answers.body,
-  //   FROM answers
-  //   WHERE answers.question_id = ${params.question_id}
-  //   AND answers.reported = false
-  //   GROUP BY answers.id;
 
   try {
     const res = await db.query(query)
@@ -63,6 +51,14 @@ async function getAnswers(params) {
   } catch (err) {
     console.log('error in model',err)
   }
+
+    // const query = `SELECT json_build_object(
+  //   'answerID', answers.id,
+  //   'answerBody', answers.body,
+  //   FROM answers
+  //   WHERE answers.question_id = ${params.question_id}
+  //   AND answers.reported = false
+  //   GROUP BY answers.id;
 }
 
 async function addQuestion(params) {

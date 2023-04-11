@@ -16,7 +16,7 @@ config:
     headers:
       content-type: "application/json"
 scenarios:
-  - name: "Get Questions"
+  - name: "Report Question"
     flow:
       - put:
           url: "/qa/questions/{{$randomNumber(200, 1000000)}}/report"

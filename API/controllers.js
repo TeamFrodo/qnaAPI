@@ -2,7 +2,7 @@ const Model = require("./models.js");
 
 async function getQuestions(req, res) {
   const params = req.query;
-  // Model.getQuestions(params).then((data) => res.send(data.rows));
+
   let questions = await Model.getQuestions(params);
 
   let answers = await Promise.all(

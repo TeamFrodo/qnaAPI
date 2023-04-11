@@ -11,7 +11,9 @@ const pool = new Pool({
 // createTables();
 
 async function createTables() {
-  await Promise.all[(createQuestions(), createAnswers(), createPhotos())];
+  await createQuestions();
+  await createAnswers();
+  await createPhotos();
 }
 const answerData = `COPY answers(id, question_id, body, date_written, answerer_name, answerer_email, reported, helpful)
   FROM '/Users/Justen/Documents/Precourse/qnaAPI/answers.csv'
@@ -41,9 +43,14 @@ async function createQuestions() {
     )
     .then((res) => console.log("created questions table"))
     .then(() => pool.query(questionData))
-    .then((result) =>console.log("copied question data rowCount =", result.rowCount))
+    .then((result) =>
+      console.log("copied question data rowCount =", result.rowCount)
+    )
     .catch((err) => console.log(err));
-  await pool.query(`SELECT setval('questions_id_seq',(SELECT MAX(id)FROM questions)+1)`).then((result) => console.log('next val set questions table', result.rowCount))
+  await pool.query(`SELECT setval('questions_id_seq',(SELECT MAX(id)FROM questions)+1)`)
+    .then((result) =>
+      console.log("next val set questions table", result.rowCount))
+    .catch(err => console.log(err));
 }
 async function createPhotos() {
   // create table for photos
@@ -51,22 +58,27 @@ async function createPhotos() {
   await pool.query(
       `CREATE TABLE photos (
   id SERIAL PRIMARY KEY,
-  answer_id INT,
+  answer_id INT REFERENCES answers(id),
   url TEXT
 );`
     )
     .then((res) => console.log("created photos table"))
-    .then(() => pool.query(photoData)
-    .then((result) => console.log("copied photo data rowCount =", result.rowCount))
-    .catch((err) => console.log(err)))
+    .then(() =>
+      pool.query(photoData)
+        .then((result) =>
+          console.log("copied photo data rowCount =", result.rowCount)
+        )
+        .catch((err) => console.log(err))
+    );
 }
 async function createAnswers() {
   //create table for answers
   await pool.query(`DROP TABLE IF EXISTS answers`);
-  await pool.query(
-    `CREATE TABLE answers (
+  await pool
+    .query(
+      `CREATE TABLE answers (
   id SERIAL PRIMARY KEY,
-  question_id INT,
+  question_id INT REFERENCES questions(id),
   body TEXT,
   date_written BIGINT,
   answerer_name TEXT,
@@ -74,12 +86,21 @@ async function createAnswers() {
   reported BOOLEAN,
   helpful INT
 );`
-  )
-    .then((res) => console.log('created answers table'))
-    .then(() => pool.query(answerData)
-    .then((result) =>console.log("copied answer data rowCount =", result.rowCount))
-    .catch((err) => console.log(err)))
-  await pool.query(`SELECT setval('answers_id_seq',(SELECT MAX(id)FROM answers)+1)`).then((result) => console.log('next val set answers table', result.rowCount))
+    )
+    .then((res) => console.log("created answers table"))
+    .then(() =>
+      pool
+        .query(answerData)
+        .then((result) =>
+          console.log("copied answer data rowCount =", result.rowCount)
+        )
+        .catch((err) => console.log(err))
+    );
+  await pool
+    .query(`SELECT setval('answers_id_seq',(SELECT MAX(id)FROM answers)+1)`)
+    .then((result) =>
+      console.log("next val set answers table", result.rowCount)
+    );
 }
 
 module.exports = pool;
